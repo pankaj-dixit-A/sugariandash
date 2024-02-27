@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+
+public partial class Sugar_pgeSelectYear : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void lnkYear_Click(object sender, EventArgs e)
+    {
+        LinkButton lnkYear = (LinkButton)sender;
+        GridViewRow rw = (GridViewRow)lnkYear.NamingContainer;
+        int index = rw.RowIndex;
+
+        Session["year"] = rw.Cells[0].Text.ToString();
+        string qry = "select Convert(varchar(10),Start_Date,103 ) as Start_Date,Convert(varchar(10),End_Date,103) as End_Date from AccountingYear where yearCode=" + Session["year"].ToString();
+        DataSet ds = new DataSet();
+        DataTable dt = new DataTable();
+        ds = clsDAL.SimpleQuery(qry);
+        dt = ds.Tables[0];
+        string sd = dt.Rows[0]["Start_Date"].ToString();
+        string ed = dt.Rows[0]["End_Date"].ToString();
+        Session["Start_Date"] = sd;
+        Session["End_Date"] = ed;
+        Session["accountingYear"] = sd + "-" + ed;
+        Label lblYear = (Label)Master.FindControl("lblYear");
+        lblYear.Text = sd + "-" + ed;
+
+        clsGV.Start_Date = Session["Start_Date"].ToString();
+        clsGV.End_Date = Session["End_Date"].ToString();
+
+        DateTime dStart = DateTime.Parse(clsGV.Start_Date, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"));
+        clsGV.Start_Date = dStart.ToString("dd/MM/yyyy");
+        DateTime dEnd = DateTime.Parse(clsGV.End_Date, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"));
+        string todayDate = clsCommon.getString("select Convert(varchar(10),getdate(),103)as todayDt");
+        DateTime dToday = DateTime.Parse(todayDate, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"));
+        if (dToday < dEnd)
+        {
+            clsGV.To_date = dToday.ToString("dd/MM/yyyy");
+        }
+        else
+        {
+            clsGV.To_date = dEnd.ToString("dd/MM/yyyy");
+        }
+
+        Response.Redirect("~/Sugar/pgeHome.aspx", false);
+    }
+
+}

@@ -1,0 +1,279 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="testpgePartyunit.aspx.cs" Inherits="testpgePartyunit" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <script type="text/javascript"  language="javascript" >
+    var SelectedRow = null;
+     var SelectedRowIndex = null;
+     var UpperBound = null;
+     var LowerBound = null;
+     function SelectSibling(e) {
+         var e = e ? e : window.event;
+         var KeyCode = e.which ? e.which : e.keyCode;
+         if (KeyCode == 40) {
+             SelectRow(SelectedRow.nextSibling, SelectedRowIndex + 1);
+         }
+         else if (KeyCode == 38) {
+             SelectRow(SelectedRow.previousSibling, SelectedRowIndex - 1);
+         }
+         else if (KeyCode == 13) {
+             document.getElementById("<%=pnlPopup.ClientID %>").style.display = "none";
+             document.getElementById("<%=txtSearchText.ClientID %>").value = "";
+             var hdnfClosePopupValue = document.getElementById("<%= hdnfClosePopup.ClientID %>").value;
+             var grid = document.getElementById("<%= grdPopup.ClientID %>");
+             document.getElementById("<%= hdnfClosePopup.ClientID %>").value = "Close";
+             if (hdnfClosePopupValue == "") {
+                // document.getElementById("<%=txtGrade.ClientID %>").value = grid.rows[SelectedRowIndex + 1].cells[0].innerText; 
+                // document.getElementById("<%=lblPaymentTo.ClientID %>").innerText = grid.rows[SelectedRowIndex + 1].cells[1].innerText;
+             }
+         }
+     }
+     function SelectRow(CurrentRow, RowIndex) {
+         UpperBound = parseInt('<%= this.grdPopup.Rows.Count %>') -1;
+         LowerBound = 0;
+         if (SelectedRow == CurrentRow || RowIndex > UpperBound || RowIndex < LowerBound)
+         if (SelectedRow != null) {
+             SelectedRow.style.backgroundColor = SelectedRow.originalBackgroundColor;
+             SelectedRow.style.color = SelectedRow.originalForeColor;
+         }
+         if (CurrentRow != null) {
+             CurrentRow.originalBackgroundColor = CurrentRow.style.backgroundColor;
+             CurrentRow.originalForeColor = CurrentRow.style.color;
+             CurrentRow.style.backgroundColor = '#DCFC5C';
+             CurrentRow.style.color = 'Black';
+         }
+         SelectedRow = CurrentRow;
+         SelectedRowIndex = RowIndex;
+         setTimeout("SelectedRow.focus();", 0);
+     }
+</script>
+
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+<asp:UpdatePanel ID="UpdatePanelMain" runat="server" UpdateMode="Conditional"   >
+<ContentTemplate>
+<asp:HiddenField ID="hdnfClosePopup" runat="server"/>
+<asp:HiddenField ID="hdnf" runat="server" />
+<asp:HiddenField ID="hdnfSuffix" runat="server" />
+<asp:Panel ID="pnlMain" runat="server" Font-Names="verdana" Font-Bold="true" ForeColor="Black" Font-Size="Small"  style="margin-left:30px; margin-top:0px; z-index:100;">
+
+<table>
+<tr> <tr><td colspan="2" align="left">
+<asp:Label ID="lblMsg" runat="server" Font-Bold="true" Font-Names="verdana" Font-Italic="true" Font-Size="Small" ForeColor="Red" ></asp:Label>
+</td></tr></tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Entry No
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtdoc_no" runat="Server" CssClass="txt" TabIndex="0" Width="90px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtdoc_no_TextChanged"></asp:TextBox>
+<asp:Button ID="btntxtdoc_no" runat="server" Text="..."
+onclick="btntxtdoc_no_Click" CssClass="btnHelp" />
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Party Code
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtac_code" runat="Server" CssClass="txt" TabIndex="1" Width="90px" style="text-align:right;"
+ AutoPostBack="True" ontextchanged="txtac_code_TextChanged"></asp:TextBox>
+<asp:Button ID="btntxtac_code" runat="server" Text="..."
+onclick="btntxtac_code_Click" CssClass="btnHelp" />
+ <asp:Label ID="lblParty_name" runat="server" CssClass="lblName" ></asp:Label></td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Unit Name
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtunit_name" runat="Server" CssClass="txt" TabIndex="2" Width="200px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtunit_name_TextChanged"></asp:TextBox>
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Unit Address
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtunit_address" runat="Server" CssClass="txt" TabIndex="3" Width="300px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtunit_address_TextChanged"></asp:TextBox>
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+City Code
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtcity_code" runat="Server" CssClass="txt" TabIndex="4" Width="90px" style="text-align:right;"
+ AutoPostBack="True" ontextchanged="txtcity_code_TextChanged"></asp:TextBox>
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+V.A.T. No.
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtvat_no" runat="Server" CssClass="txt" TabIndex="5" Width="90px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtvat_no_TextChanged"></asp:TextBox>
+</td>
+
+
+
+<td align="left" style="width:10%;" >
+E.C.C. No
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtecc_no" runat="Server" CssClass="txt" TabIndex="6" Width="120px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtecc_no_TextChanged"></asp:TextBox>
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Mobile Person1 Name
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtperson1" runat="Server" CssClass="txt" TabIndex="7" Width="120px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtperson1_TextChanged"></asp:TextBox>
+</td>
+
+
+
+<td align="left" style="width:10%;" >
+Mobile No
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtperson1_mobile" runat="Server" CssClass="txt" TabIndex="8" Width="120px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtperson1_mobile_TextChanged"></asp:TextBox>
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Mobile Person1 Name
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtperson2" runat="Server" CssClass="txt" TabIndex="9" Width="120px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtperson2_TextChanged"></asp:TextBox>
+</td>
+
+
+
+<td align="left" style="width:10%;" >
+Mobile No
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtperson2_mobile" runat="Server" CssClass="txt" TabIndex="10" Width="120px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtperson2_mobile_TextChanged"></asp:TextBox>
+</td>
+
+
+</tr>
+<tr>
+
+<td align="left" style="width:10%;" >
+Remarks
+</td>
+<td align="left" style="width:10%;" >
+<asp:TextBox ID="txtremarks" runat="Server" CssClass="txt" TabIndex="11" Width="120px" style="text-align:left;"
+ AutoPostBack="True" ontextchanged="txtremarks_TextChanged"></asp:TextBox>
+</td>
+
+
+
+</tr></table>
+</asp:Panel>
+<table width="80%" align="left">
+<tr>
+<td align="center">
+<asp:Button ID="btnAdd" runat="server"  Text="Add New" CssClass="btnHelp" Width="90px"
+ValidationGroup="save" onclick="btnAdd_Click" />
+ &nbsp;
+<asp:Button ID="btnSave" runat="server"  Text="Save" CssClass="btnHelp" Width="90px"
+ValidationGroup="add" onclick="btnSave_Click" />
+ &nbsp;
+<asp:Button ID="btnEdit" runat="server"  Text="Edit" CssClass="btnHelp" Width="90px"
+ValidationGroup="save" onclick="btnEdit_Click" />
+ &nbsp;
+<asp:Button ID="btnDelete" runat="server"  Text="Delete" CssClass="btnHelp" Width="90px"
+ValidationGroup="add" onclick="btnDelete_Click" />
+ &nbsp;
+<asp:Button ID="btnCancel" runat="server"  Text="Cancel" CssClass="btnHelp" Width="90px"
+ValidationGroup="save" onclick="btnCancel_Click" />
+</td>
+</tr>
+<tr>
+<td align="center"><asp:Button ID="btnFirst" runat="server"  Text="<<" ToolTip="First" CssClass="btnHelp" onclick="btnFirst_Click" Width="90px" />
+<asp:Button ID="btnPrevious" runat="server"  Text="<" ToolTip="First" CssClass="btnHelp" onclick="btnPrevious_Click" Width="90px" />
+<asp:Button ID="btnNext" runat="server"  Text=">" ToolTip="First" CssClass="btnHelp" onclick="btnNext_Click" Width="90px" />
+<asp:Button ID="btnLast" runat="server"  Text=">>" ToolTip="First" CssClass="btnHelp" onclick="btnLast_Click" Width="90px" />
+</td>
+</tr>
+</table>
+
+
+<asp:Panel ID="pnlPopup" runat="server" Width="70%" align="center"   ScrollBars="None" BackColor="#FFFFE4" Direction="LeftToRight"  style="z-index:5000 ;  position:absolute;display:none; float:right; max-height:500px; min-height:500px; box-shadow: 1px 1px 8px 2px; background-position:center; left:10%; top:10%;">
+<asp:ImageButton ID="imgBtnClose"  runat="server" ImageUrl="~/Images/closebtn.jpg" Width="20px" Height="20px" style="float:right; vertical-align:top;" OnClick="imgBtnClose_Click" ToolTip="Close" />
+<table width="95%" >
+<tr>
+<td align="center" style="background-color:#F5B540; width:100%;">
+<asp:Label ID="lblPopupHead" runat="server" Font-Size="Medium" Font-Names="verdana" Font-Bold="true" ForeColor="White"></asp:Label>
+</td>
+</tr>
+<tr>
+<td>
+Search Text:
+<asp:TextBox ID="txtSearchText" runat="server" Width="250px" Height="20px" AutoPostBack="true" OnTextChanged="txtSearchText_TextChanged" ></asp:TextBox> 
+<asp:Button ID="btnSearch" runat="server" Text="Search"  CssClass="btnSubmit" OnClick="btnSearch_Click"/>
+</td>
+</tr>
+<tr>
+<td>
+<asp:Panel ID="pnlInner" runat="server" Width="100%" Direction="LeftToRight" BackColor="#FFFFE4" style="z-index:5000 ;  float:right; overflow:auto; height:400px">
+<asp:GridView ID="grdPopup" runat="server"  AutoGenerateColumns="true"  Width="100%"  EmptyDataText="No Records Found"
+HeaderStyle-BackColor="#6D8980" HeaderStyle-ForeColor="White" onrowcreated="grdPopup_RowCreated" OnRowDataBound="grdPopup_RowDataBound"  style="table-layout:fixed;">
+<HeaderStyle Height="30px" ForeColor="White" BackColor="#6D8980" />
+<RowStyle Height="25px" ForeColor="Black" Wrap="false" />
+</asp:GridView>
+</asp:Panel>
+</td>
+</tr>
+</table>
+</asp:Panel>
+<asp:Panel ID="pnlPopupDetails" runat="server" BackColor="GhostWhite" Width="955px" BorderColor="Teal" BorderWidth="1px" Height="300px"
+BorderStyle="Solid" style="z-index:4999  ;  left:20%; top:20%;  position:absolute;display:none; font-weight:bold; box-shadow:1px 2px 10px 2px;">
+<table width="80%" align="center" >
+
+<tr> 
+<td colspan="2" align="center" style="background-color:lightslategrey; color:White;">
+<asp:Label ID="lblTenderDetails" runat="server" Font-Size="Medium" Font-Names="verdana" Text="Tender Details"></asp:Label>
+</td>
+</tr>
+
+</tr>
+</table>
+</asp:Panel>
+</ContentTemplate>
+</asp:UpdatePanel>
+</asp:Content>
+
